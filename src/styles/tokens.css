@@ -1,0 +1,20 @@
+:root {
+  --off-white: #f7f5ef;
+  --off-white-strong: #fffdf8;
+  --sage-900: #1f3a32;
+  --sage-700: #33584c;
+  --sage-500: #5f7e71;
+  --sage-300: #9db8ab;
+  --sage-100: #e3ede7;
+  --text-main: #1f302a;
+  --text-muted: #536860;
+  --surface: rgba(255, 253, 248, 0.86);
+  --border-soft: rgba(95, 126, 113, 0.2);
+  --shadow-soft: 0 18px 40px -28px rgba(31, 58, 50, 0.5);
+  --shadow-hover: 0 26px 46px -30px rgba(31, 58, 50, 0.62);
+  --radius-large: 1.25rem;
+  --radius-medium: 0.9rem;
+  --radius-small: 0.7rem;
+  --layout-max: 1120px;
+  --font-sans: 'Manrope', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
