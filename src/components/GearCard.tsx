@@ -2,9 +2,17 @@ import { animate } from 'animejs'
 import { Link } from 'react-router-dom'
 import { useRef } from 'react'
 import { LAZY_PLACEHOLDER } from '../data/media'
+import { useImageLoader } from '../hooks/useImageLoader'
+import type { GearItem } from '@/store/useBookingStore'
 
-function GearCard({ gear, onBookNow }) {
-  const cardRef = useRef(null)
+interface GearCardProps {
+  gear: GearItem
+  onBookNow: (gear: GearItem) => void
+}
+
+function GearCard({ gear, onBookNow }: GearCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const { isLoaded, imageSrc } = useImageLoader(gear.image, LAZY_PLACEHOLDER)
 
   const handleMouseEnter = () => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -40,9 +48,8 @@ function GearCard({ gear, onBookNow }) {
       <div className="gear-media">
         <img
           alt={gear.imageAlt}
-          className="gear-image lozad"
-          data-src={gear.image}
-          src={LAZY_PLACEHOLDER}
+          className={`gear-image ${isLoaded ? 'loaded' : 'loading'}`}
+          src={imageSrc}
         />
         <span className="price-tag">${gear.pricePerDay}/day</span>
       </div>

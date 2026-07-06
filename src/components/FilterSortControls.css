@@ -1,0 +1,112 @@
+.filter-sort-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.filter-group,
+.sort-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.filter-select {
+  padding: 0.625rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-select:hover {
+  border-color: #bbb;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.reset-filters-button {
+  margin-left: auto;
+  padding: 0.625rem 1.25rem;
+  background-color: transparent;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  color: #007bff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-filters-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .filter-sort-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group,
+  .sort-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reset-filters-button {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+[data-theme='dark'] .filter-sort-controls {
+  background-color: #1e1e1e;
+}
+
+[data-theme='dark'] .filter-label {
+  color: #ccc;
+}
+
+[data-theme='dark'] .filter-select {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #f0f0f0;
+}
+
+[data-theme='dark'] .filter-select:hover {
+  border-color: #666;
+}
+
+[data-theme='dark'] .filter-select:focus {
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.15);
+}
+
+[data-theme='dark'] .reset-filters-button {
+  border-color: #4a9eff;
+  color: #4a9eff;
+}
+
+[data-theme='dark'] .reset-filters-button:hover {
+  background-color: #4a9eff;
+  color: #1a1a1a;
+}
