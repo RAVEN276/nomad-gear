@@ -3,16 +3,17 @@ import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useBookingModal } from './useBookingModal'
+import type { GearItem } from '@/store/useBookingStore'
 
 function BookNowModal() {
   const navigate = useNavigate()
   const { closeBookingModal, isOpen, selectedGear } = useBookingModal()
-  const overlayRef = useRef(null)
-  const panelRef = useRef(null)
-  const feedbackRef = useRef(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLElement>(null)
+  const feedbackRef = useRef<HTMLParagraphElement>(null)
   const isClosingRef = useRef(false)
 
-  const performClose = (callback) => {
+  const performClose = (callback?: () => void) => {
     if (isClosingRef.current) return
     isClosingRef.current = true
 
@@ -107,7 +108,7 @@ function BookNowModal() {
       return undefined
     }
 
-    const handleEscape = (event) => {
+    const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         handleClose()
       }
@@ -124,13 +125,13 @@ function BookNowModal() {
     return null
   }
 
-  const selectedKitName = selectedGear?.name ?? 'Flexible Custom Kit'
+  const selectedKitName = (selectedGear as GearItem | null)?.name ?? 'Flexible Custom Kit'
 
-  const handleQuickSubmit = (event) => {
+  const handleQuickSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const button = event.target.querySelector('button[type="submit"]')
+      const button = event.currentTarget.querySelector('button[type="submit"]')
       if (button) {
         animate(button, {
           scale: [1, 0.95, 1],
@@ -154,7 +155,7 @@ function BookNowModal() {
   }
 
   const openFullBookingPage = () => {
-    const querySuffix = selectedGear?.slug ? `?gear=${selectedGear.slug}` : ''
+    const querySuffix = (selectedGear as GearItem | null)?.slug ? `?gear=${(selectedGear as GearItem).slug}` : ''
     performClose(() => {
       navigate(`/booking${querySuffix}`)
     })

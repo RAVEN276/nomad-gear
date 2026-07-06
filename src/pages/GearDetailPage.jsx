@@ -1,15 +1,17 @@
 import { animate } from 'animejs'
 import { Link, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getGearBySlug } from '../data/gear'
 import { LAZY_PLACEHOLDER } from '../data/media'
 import { useBookingModal } from '../features/booking/useBookingModal'
 import { useStaggerAnimation } from '../hooks/useStaggerAnimation'
+import { StarRating, ReviewSection, ReviewForm } from '../components/ReviewComponents'
 
 function GearDetailPage() {
   const { slug } = useParams()
   const selectedGear = getGearBySlug(slug)
   const { openBookingModal } = useBookingModal()
+  const [showReviewForm, setShowReviewForm] = useState(false)
 
   useStaggerAnimation('.detail-list li', {
     opacity: [0, 1],
@@ -99,6 +101,27 @@ function GearDetailPage() {
             Full booking page
           </Link>
         </div>
+
+        <div className="review-section-divider" />
+
+        <div className="review-header-section">
+          <h2>Customer Reviews</h2>
+          <button
+            className="secondary-button"
+            onClick={() => setShowReviewForm(!showReviewForm)}
+            type="button"
+          >
+            {showReviewForm ? 'Cancel' : 'Write a Review'}
+          </button>
+        </div>
+
+        {showReviewForm && (
+          <div className="review-form-container reveal">
+            <ReviewForm gearId={selectedGear.id} onSuccess={() => setShowReviewForm(false)} />
+          </div>
+        )}
+
+        <ReviewSection gearId={selectedGear.id} />
       </div>
     </section>
   )

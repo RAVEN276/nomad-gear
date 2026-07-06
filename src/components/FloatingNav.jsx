@@ -2,6 +2,7 @@ import { animate } from 'animejs'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { getGearCatalog } from '../data/gear'
+import { ThemeToggle } from './ThemeToggle'
 
 const navItems = [
   { label: 'Home', to: '/' },
@@ -160,6 +161,8 @@ function FloatingNav() {
             </div>
           )}
         </div>
+
+        <ThemeToggle />
 
         <Link className="nav-cta" to="/gear">
           Escape This Weekend
