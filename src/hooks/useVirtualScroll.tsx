@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 
 interface VirtualListProps<T> {
   items: T[]
@@ -19,7 +19,6 @@ export function VirtualList<T>({
   const containerRef = useRef<HTMLDivElement>(null)
 
   const totalHeight = items.length * itemHeight
-  const visibleCount = Math.ceil(containerHeight / itemHeight)
   
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan)
   const endIndex = Math.min(
@@ -77,7 +76,6 @@ export function useVirtualScroll({
   const [scrollTop, setScrollTop] = useState(0)
 
   const totalHeight = totalItems * itemHeight
-  const visibleCount = Math.ceil(containerHeight / itemHeight)
   
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan)
   const endIndex = Math.min(

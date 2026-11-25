@@ -8,25 +8,33 @@ export interface ThemeState {
   setTheme: (theme: Theme) => void
 }
 
+function applyTheme(theme: Theme): void {
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-theme', theme)
+  }
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('theme', theme)
+  }
+}
+
 export const useThemeStore = create<ThemeState>((set) => ({
   theme: 'light',
   toggleTheme: () =>
     set((state) => {
-      const newTheme = state.theme === 'light' ? 'dark' : 'light'
-      document.documentElement.setAttribute('data-theme', newTheme)
+      const newTheme: Theme = state.theme === 'light' ? 'dark' : 'light'
+      applyTheme(newTheme)
       return { theme: newTheme }
     }),
   setTheme: (theme) => {
-    document.documentElement.setAttribute('data-theme', theme)
+    applyTheme(theme)
     set({ theme })
   },
 }))
 
-// Initialize theme on load
 if (typeof window !== 'undefined') {
   const savedTheme = localStorage.getItem('theme') as Theme | null
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light')
-  document.documentElement.setAttribute('data-theme', initialTheme)
+  const initialTheme: Theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : prefersDark ? 'dark' : 'light'
+  applyTheme(initialTheme)
   useThemeStore.setState({ theme: initialTheme })
 }

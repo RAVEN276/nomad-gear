@@ -28,7 +28,7 @@ describe('bookingFormSchema', () => {
     const result = bookingFormSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.errors[0].path).toContain('name')
+      expect(result.error.issues[0].path).toContain('name')
     }
   })
 
@@ -44,7 +44,7 @@ describe('bookingFormSchema', () => {
     const result = bookingFormSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.errors[0].path).toContain('email')
+      expect(result.error.issues[0].path).toContain('email')
     }
   })
 
@@ -60,7 +60,7 @@ describe('bookingFormSchema', () => {
     const result = bookingFormSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.errors[0].path).toContain('endDate')
+      expect(result.error.issues[0].path).toContain('endDate')
     }
   })
 
@@ -77,7 +77,7 @@ describe('bookingFormSchema', () => {
     const result = bookingFormSchema.safeParse(invalidData)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.errors[0].path).toContain('notes')
+      expect(result.error.issues[0].path).toContain('notes')
     }
   })
 })

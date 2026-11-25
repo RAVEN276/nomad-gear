@@ -34,6 +34,7 @@ export function BookingForm() {
     try {
       await submitBooking.mutateAsync({
         ...data,
+        notes: data.notes ?? '',
         gearSlug: selectedGear?.slug,
       })
       setIsSubmitted(true)
@@ -54,30 +55,31 @@ export function BookingForm() {
 
   if (isSubmitted) {
     return (
-      <div className="booking-feedback booking-feedback-success">
-        <div className="feedback-icon">✓</div>
-        <h3>Request Received!</h3>
+      <div className="booking-feedback booking-feedback-success" role="status">
+        <div className="feedback-icon" aria-hidden="true">OK</div>
+        <h3>Request Received</h3>
         <p>
-          Thanks for booking with Nomad Gear. We'll confirm your kit availability
-          and send details within 2 hours.
+          Your tentative hold request has been recorded. Availability confirmation will be sent by email.
         </p>
       </div>
     )
   }
 
   return (
-    <form className="booking-form-card" onSubmit={handleSubmit(onSubmit)}>
+    <form className="booking-form-card" noValidate onSubmit={handleSubmit(onSubmit)}>
       <div className="booking-form-field">
         <label className="form-label" htmlFor="booking-name">
           Full Name
           <span className="required-indicator">*</span>
         </label>
         <input
+          aria-invalid={!!errors.name}
           className={`form-input ${errors.name ? 'form-input-error' : ''}`}
           id="booking-name"
+          placeholder="Your Name"
           {...register('name')}
         />
-        {errors.name && <p className="form-error">{errors.name.message}</p>}
+        {errors.name && <p className="form-error" role="alert">{errors.name.message}</p>}
       </div>
 
       <div className="booking-form-field">
@@ -86,25 +88,28 @@ export function BookingForm() {
           <span className="required-indicator">*</span>
         </label>
         <input
+          aria-invalid={!!errors.email}
           className={`form-input ${errors.email ? 'form-input-error' : ''}`}
           id="booking-email"
+          placeholder="name@example.com"
           type="email"
           {...register('email')}
         />
-        {errors.email && <p className="form-error">{errors.email.message}</p>}
+        {errors.email && <p className="form-error" role="alert">{errors.email.message}</p>}
       </div>
 
       <div className="booking-form-field booking-dates-field">
-        <label className="form-label">
+        <span className="form-label">
           Trip Dates
           <span className="required-indicator">*</span>
-        </label>
+        </span>
         <div className="date-inputs-group">
           <div className="date-input-wrapper">
             <label className="date-input-label" htmlFor="booking-start-date">
               From
             </label>
             <input
+              aria-invalid={!!errors.startDate}
               className={`form-input date-input ${errors.startDate ? 'form-input-error' : ''}`}
               id="booking-start-date"
               type="date"
@@ -117,6 +122,7 @@ export function BookingForm() {
               To
             </label>
             <input
+              aria-invalid={!!errors.endDate}
               className={`form-input date-input ${errors.endDate ? 'form-input-error' : ''}`}
               id="booking-end-date"
               type="date"
@@ -126,7 +132,7 @@ export function BookingForm() {
           </div>
         </div>
         {(errors.startDate || errors.endDate) && (
-          <p className="form-error">
+          <p className="form-error" role="alert">
             {errors.startDate?.message || errors.endDate?.message}
           </p>
         )}
@@ -158,9 +164,9 @@ export function BookingForm() {
         <textarea
           className="form-input"
           id="booking-notes"
-          rows="4"
+          rows={4}
           maxLength={200}
-          placeholder="Tell us your destination and preferred gear add-ons."
+          placeholder="Destination, weather considerations, or preferred add-ons."
           {...register('notes')}
         />
       </div>

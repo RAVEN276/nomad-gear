@@ -317,7 +317,70 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📝 License
+## �️ Future Roadmap
+
+### Phase 2: Enhanced UX & Features
+- **Category Dropdowns**: Multi-level navigation for gear categories (Camping, Hiking, Water Sports)
+- **Wishlist System**: Users can save favorite gear for later
+- **Filter & Sort**: Advanced filtering by price, rating, availability
+- **Image Gallery**: Lightbox and carousel for gear photos
+- **SVG Path Morphing**: Advanced anime.js path morphing for hero animations
+- **Newsletter Integration**: Email signup with Mailchimp/ConvertKit
+
+### Phase 3: Advanced Animations
+- **Page Transitions**: FLIP animations between routes
+- **Scroll Spy Navigation**: Navbar highlights current section
+- **Lottie Integration**: Complex animation files for illustrations
+- **Staggered List Animations**: Cards reveal with cascading delays
+- **Hero Image Zoom**: Ken Burns effect on scroll
+- **Magnetic Buttons**: Cursor tracking animations
+
+### Phase 4: Backend & Features
+- **User Authentication**: Sign up, login, profile management
+- **Booking System**: Real API integration with payment processing
+- **Reviews & Ratings**: User-generated reviews with star ratings
+- **Availability Calendar**: Real-time gear availability
+- **Email Notifications**: Booking confirmations and promotional emails
+- **Analytics**: Track user behavior and conversion metrics
+
+### Phase 5: Performance & SEO
+- **Server-Side Rendering (SSR)**: With Remix or Next.js migration for better SEO
+- **Image Optimization**: WebP, AVIF formats with responsive srcset
+- **Code Splitting**: Lazy load components per route
+- **Bundle Analysis**: Reduce JS payload with tree-shaking
+- **Core Web Vitals**: Optimize LCP, FID, CLS metrics
+- **Structured Data**: JSON-LD schema for rich search results
+
+### Phase 6: Mobile & Accessibility
+- **Progressive Web App (PWA)**: Offline support with service workers
+- **Mobile App**: React Native or Flutter companion app
+- **Accessibility Audit**: WCAG 2.1 AA compliance
+- **Keyboard Navigation**: Full keyboard support for all interactive elements
+- **Screen Reader Testing**: Comprehensive ARIA labels
+- **Dark Mode**: Theme switcher with system preference detection
+
+### Phase 7: Advanced Analytics & Personalization
+- **Recommendation Engine**: AI-based gear suggestions
+- **User Segmentation**: Personalized content based on behavior
+- **A/B Testing**: Experiment with different layouts and copy
+- **Heat Maps**: Understand user interaction patterns
+- **Performance Monitoring**: Real User Monitoring (RUM) with Sentry
+
+### Quick Wins (Low effort, High impact)
+- ✅ Add testimonials carousel with auto-scroll
+- ✅ Implement search history/suggestions
+- ✅ Add share buttons for gear listings
+- ✅ Create loading skeleton screens
+- ✅ Add breadcrumb navigation
+- ✅ Implement "Recently Viewed" section
+- ✅ Add gear comparison feature
+- ✅ Create seasonal collections
+- ✅ Add quantity selector in booking form
+- ✅ Implement coupon/discount code system
+
+---
+
+## �📝 License
 
 This project is open source and available under the [MIT License](LICENSE).
 

@@ -1,4 +1,4 @@
-import { useGearFilters, type SortOption } from './useGearFilters'
+import type { SortOption } from '@/hooks/useGearFilters'
 import './FilterSortControls.css'
 
 interface FilterSortControlsProps {
@@ -19,10 +19,10 @@ export function FilterSortControls({
   onReset,
 }: FilterSortControlsProps) {
   return (
-    <div className="filter-sort-controls">
+    <div className="filter-sort-controls" role="region" aria-label="Filter and sort kits">
       <div className="filter-group">
         <label htmlFor="category-filter" className="filter-label">
-          Category:
+          Category
         </label>
         <select
           id="category-filter"
@@ -40,7 +40,7 @@ export function FilterSortControls({
 
       <div className="sort-group">
         <label htmlFor="sort-option" className="filter-label">
-          Sort by:
+          Sort by
         </label>
         <select
           id="sort-option"
@@ -48,10 +48,10 @@ export function FilterSortControls({
           value={currentSort}
           onChange={(e) => onSortChange(e.target.value as SortOption)}
         >
-          <option value="name">Name</option>
+          <option value="name">Name (A to Z)</option>
           <option value="price-asc">Price: Low to High</option>
           <option value="price-desc">Price: High to Low</option>
-          <option value="rating">Rating</option>
+          <option value="rating">Highest Rated</option>
         </select>
       </div>
 

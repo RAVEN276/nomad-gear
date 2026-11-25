@@ -5,6 +5,7 @@ import BookingPage from './pages/BookingPage'
 import GearCatalogPage from './pages/GearCatalogPage'
 import GearDetailPage from './pages/GearDetailPage'
 import HomePage from './pages/HomePage'
+import RoadmapPage from './pages/RoadmapPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export const router = createBrowserRouter([
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: 'about',
         element: <AboutPage />,
+      },
+      {
+        path: 'roadmap',
+        element: <RoadmapPage />,
       },
       {
         path: '*',

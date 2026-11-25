@@ -1,15 +1,26 @@
 import { create } from 'zustand'
 
+export interface GearImage {
+  id: string
+  src: string
+  alt: string
+}
+
 export interface GearItem {
   id: string
   name: string
   slug: string
   pricePerDay: number
   category: string
+  summary: string
+  capacity: string
+  includes: string[]
   image: string
+  imageAlt: string
+  images?: GearImage[]
   description: string
-  features: string[]
-  inStock: boolean
+  features?: string[]
+  inStock?: boolean
 }
 
 export interface BookingState {

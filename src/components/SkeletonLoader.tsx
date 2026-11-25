@@ -1,13 +1,13 @@
-import { ComponentProps, Suspense } from 'react'
+import { Suspense, type ComponentType } from 'react'
 
-type ComponentType = React.ComponentType<any>
-
-export function LazyComponent(component: ComponentType) {
-  return (props: ComponentProps<ComponentType>) => (
-    <Suspense fallback={<SkeletonLoader />}>
-      {component(props)}
-    </Suspense>
-  )
+export function LazyComponent<P extends object>(Component: ComponentType<P>) {
+  return function WrappedLazyComponent(props: P) {
+    return (
+      <Suspense fallback={<SkeletonLoader />}>
+        <Component {...props} />
+      </Suspense>
+    )
+  }
 }
 
 export function SkeletonLoader({ lines = 3 }: { lines?: number }) {

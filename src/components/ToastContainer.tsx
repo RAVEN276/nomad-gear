@@ -1,5 +1,12 @@
-import { useToastStore } from '@/store/useToastStore'
+import { useToastStore, type Toast } from '@/store/useToastStore'
 import './ToastContainer.css'
+
+const toastLabels: Record<Toast['type'], string> = {
+  success: 'OK',
+  error: 'ERR',
+  info: 'INFO',
+  warning: 'WARN',
+}
 
 export function ToastContainer() {
   const { toasts, removeToast } = useToastStore()
@@ -9,25 +16,22 @@ export function ToastContainer() {
   }
 
   return (
-    <div className="toast-container">
+    <div className="toast-container" aria-live="polite">
       {toasts.map((toast) => (
         <div
           key={toast.id}
           className={`toast toast-${toast.type}`}
           role="alert"
-          onClick={() => removeToast(toast.id)}
         >
-          <span className="toast-icon">
-            {toast.type === 'success' && '✓'}
-            {toast.type === 'error' && '✕'}
-            {toast.type === 'info' && 'ℹ'}
-            {toast.type === 'warning' && '⚠'}
+          <span className="toast-icon" aria-hidden="true">
+            {toastLabels[toast.type]}
           </span>
           <span className="toast-message">{toast.message}</span>
           <button
             className="toast-close"
             onClick={() => removeToast(toast.id)}
             aria-label="Close notification"
+            type="button"
           >
             ×
           </button>

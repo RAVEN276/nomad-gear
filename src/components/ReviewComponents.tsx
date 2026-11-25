@@ -10,39 +10,52 @@ interface StarRatingProps {
   onRate?: (rating: number) => void
 }
 
-export function StarRating({ 
-  rating, 
-  maxRating = 5, 
+export function StarRating({
+  rating,
+  maxRating = 5,
   size = 'md',
   interactive = false,
-  onRate 
+  onRate,
 }: StarRatingProps) {
-  const handleClick = (value: number) => {
-    if (interactive && onRate) {
-      onRate(value)
-    }
+  if (interactive) {
+    return (
+      <div className={`star-rating star-rating-${size}`} role="group" aria-label="Select rating">
+        {Array.from({ length: maxRating }).map((_, index) => {
+          const value = index + 1
+          const isFilled = value <= rating
+          return (
+            <button
+              key={value}
+              aria-label={`Rate ${value} out of ${maxRating} stars`}
+              aria-pressed={isFilled}
+              className={`star star-interactive ${isFilled ? 'star-filled' : ''}`}
+              onClick={() => onRate?.(value)}
+              type="button"
+            >
+              ★
+            </button>
+          )
+        })}
+      </div>
+    )
   }
 
   return (
-    <div className={`star-rating star-rating-${size}`} role="img" aria-label={`Rating: ${rating} out of ${maxRating}`}>
+    <div
+      className={`star-rating star-rating-${size}`}
+      role="img"
+      aria-label={`Rating: ${rating} out of ${maxRating}`}
+    >
       {Array.from({ length: maxRating }).map((_, index) => {
         const value = index + 1
         const isFilled = value <= rating
         const isHalf = !isFilled && value - 0.5 <= rating
-        
+
         return (
           <span
             key={index}
-            className={`star ${isFilled ? 'star-filled' : ''} ${isHalf ? 'star-half' : ''} ${interactive ? 'star-interactive' : ''}`}
-            onClick={() => handleClick(value)}
-            onKeyDown={(e) => {
-              if (interactive && onRate && (e.key === 'Enter' || e.key === ' ')) {
-                handleClick(value)
-              }
-            }}
-            tabIndex={interactive ? 0 : undefined}
-            role={interactive ? 'button' : undefined}
-            aria-label={interactive ? `${value} stars` : undefined}
+            aria-hidden="true"
+            className={`star ${isFilled ? 'star-filled' : ''} ${isHalf ? 'star-half' : ''}`}
           >
             ★
           </span>
@@ -70,7 +83,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
   })
 
   return (
-    <div className="review-card">
+    <article className="review-card">
       <div className="review-header">
         <div className="reviewer-info">
           <span className="reviewer-name">{review.userName}</span>
@@ -80,10 +93,8 @@ export function ReviewCard({ review }: ReviewCardProps) {
           {formattedDate}
         </time>
       </div>
-      {review.comment && (
-        <p className="review-comment">{review.comment}</p>
-      )}
-    </div>
+      {review.comment && <p className="review-comment">{review.comment}</p>}
+    </article>
   )
 }
 
@@ -94,7 +105,7 @@ interface ReviewSectionProps {
 export function ReviewSection({ gearId }: ReviewSectionProps) {
   const getReviews = useReviewStore((state) => state.getReviews)
   const getAverageRating = useReviewStore((state) => state.getAverageRating)
-  
+
   const reviews = getReviews(gearId)
   const averageRating = getAverageRating(gearId)
 
@@ -102,7 +113,7 @@ export function ReviewSection({ gearId }: ReviewSectionProps) {
     return (
       <section className="review-section">
         <h3>Customer Reviews</h3>
-        <p className="no-reviews">No reviews yet. Be the first to review this gear!</p>
+        <p className="no-reviews">No reviews submitted yet. Use Write a Review above to add yours.</p>
       </section>
     )
   }
@@ -115,7 +126,9 @@ export function ReviewSection({ gearId }: ReviewSectionProps) {
           <div className="average-rating">
             <span className="rating-number">{averageRating.toFixed(1)}</span>
             <StarRating rating={averageRating} size="md" />
-            <span className="review-count">({reviews.length} review{reviews.length !== 1 ? 's' : ''})</span>
+            <span className="review-count">
+              ({reviews.length} review{reviews.length !== 1 ? 's' : ''})
+            </span>
           </div>
         </div>
       </div>
@@ -146,7 +159,7 @@ export function ReviewForm({ gearId, onSuccess }: ReviewFormProps) {
   } = useReviewForm({ gearId, onSuccess })
 
   return (
-    <form className="review-form" onSubmit={handleSubmit}>
+    <form className="review-form" noValidate onSubmit={handleSubmit}>
       <div className="review-form-field">
         <label className="form-label" htmlFor="review-name">
           Your Name
@@ -157,12 +170,12 @@ export function ReviewForm({ gearId, onSuccess }: ReviewFormProps) {
           type="text"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          placeholder="Enter your name"
+          placeholder="Your Name"
         />
       </div>
 
       <div className="review-form-field">
-        <label className="form-label">Rating</label>
+        <span className="form-label">Rating</span>
         <StarRating
           rating={rating}
           maxRating={5}
@@ -179,10 +192,10 @@ export function ReviewForm({ gearId, onSuccess }: ReviewFormProps) {
         <textarea
           className="form-input"
           id="review-comment"
-          rows="4"
+          rows={4}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Share your experience with this gear..."
+          placeholder="Describe fit, condition, and how the kit performed on your trip."
         />
       </div>
 

@@ -1,5 +1,4 @@
 import { useBookingModal } from '../features/booking/useBookingModal'
-import { useBookingStore } from '@/store/useBookingStore'
 import GearCard from './GearCard'
 import { VirtualList } from '../hooks/useVirtualScroll'
 import type { GearItem } from '@/store/useBookingStore'
@@ -8,25 +7,39 @@ interface GearGridProps {
   description?: string
   items: GearItem[]
   title: string
+  folio?: string
   isLoading?: boolean
+  onResetFilters?: () => void
 }
 
-const CARD_HEIGHT = 320
-const CONTAINER_HEIGHT = 800
+const CARD_HEIGHT = 360
+const CONTAINER_HEIGHT = 820
 
-function GearGrid({ description, items, title, isLoading = false }: GearGridProps) {
+function GearGrid({
+  description,
+  items,
+  title,
+  folio = '02',
+  isLoading = false,
+  onResetFilters,
+}: GearGridProps) {
   const { openBookingModal } = useBookingModal()
-  const selectedCategory = useBookingStore((state) => state.selectedCategory)
+
+  const renderHeader = () => (
+    <div className="section-header-split">
+      <div className="section-heading-main">
+        <span className="section-folio">{folio} · Curated Rental Kits</span>
+        <h2>{title}</h2>
+      </div>
+      {description && <p>{description}</p>}
+    </div>
+  )
 
   if (isLoading) {
     return (
       <section className="page-shell section-block">
-        <div className="section-heading reveal">
-          <p className="eyebrow">Curated Rental Kits</p>
-          <h2>{title}</h2>
-          <p>{description}</p>
-        </div>
-        <div className="gear-grid-skeleton">
+        {renderHeader()}
+        <div className="gear-grid-skeleton" role="status" aria-label="Loading gear kits">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="gear-card-skeleton">
               <div className="skeleton-image" />
@@ -43,13 +56,17 @@ function GearGrid({ description, items, title, isLoading = false }: GearGridProp
   if (items.length === 0) {
     return (
       <section className="page-shell section-block">
-        <div className="section-heading reveal">
-          <p className="eyebrow">Curated Rental Kits</p>
-          <h2>{title}</h2>
-          <p>{description}</p>
-        </div>
-        <div className="gear-grid-empty">
-          <p>No gear items found matching your criteria.</p>
+        {renderHeader()}
+        <div className="gear-grid-empty" role="status">
+          <h3>No matching rental kits</h3>
+          <p>
+            No kits match your active category or search filter. Reset filters to view the full catalog.
+          </p>
+          {onResetFilters && (
+            <button className="primary-button" onClick={onResetFilters} type="button">
+              Reset Filters
+            </button>
+          )}
         </div>
       </section>
     )
@@ -57,17 +74,13 @@ function GearGrid({ description, items, title, isLoading = false }: GearGridProp
 
   const renderCard = (gear: GearItem, index: number) => (
     <div key={gear.id} style={{ height: CARD_HEIGHT }}>
-      <GearCard gear={gear} onBookNow={openBookingModal} />
+      <GearCard gear={gear} index={index} onBookNow={openBookingModal} />
     </div>
   )
 
   return (
     <section className="page-shell section-block">
-      <div className="section-heading reveal">
-        <p className="eyebrow">Curated Rental Kits</p>
-        <h2>{title}</h2>
-        <p>{description}</p>
-      </div>
+      {renderHeader()}
 
       {items.length > 10 ? (
         <VirtualList<GearItem>
@@ -79,8 +92,14 @@ function GearGrid({ description, items, title, isLoading = false }: GearGridProp
         />
       ) : (
         <div className="gear-grid">
-          {items.map((gear) => (
-            <GearCard gear={gear} key={gear.id} onBookNow={openBookingModal} />
+          {items.map((gear, index) => (
+            <GearCard
+              featured={index === 0 && items.length > 2}
+              gear={gear}
+              index={index}
+              key={gear.id}
+              onBookNow={openBookingModal}
+            />
           ))}
         </div>
       )}
