@@ -6,6 +6,7 @@ export interface FilterOptions {
   minPrice?: number
   maxPrice?: number
   minRating?: number
+  savedOnly: boolean
 }
 
 export type SortOption = 'price-asc' | 'price-desc' | 'rating' | 'name'
@@ -20,12 +21,17 @@ interface UseGearFiltersReturn {
   categories: string[]
 }
 
-export function useGearFilters(items: GearItem[], ratings?: Record<string, number>): UseGearFiltersReturn {
+export function useGearFilters(
+  items: GearItem[],
+  ratings?: Record<string, number>,
+  wishlistedIds?: string[],
+): UseGearFiltersReturn {
   const [filters, setFilters] = useState<FilterOptions>({
     category: 'all',
     minPrice: undefined,
     maxPrice: undefined,
     minRating: undefined,
+    savedOnly: false,
   })
 
   const [sortOption, setSortOption] = useState<SortOption>('name')
@@ -37,6 +43,11 @@ export function useGearFilters(items: GearItem[], ratings?: Record<string, numbe
 
   const filteredItems = useMemo(() => {
     let result = [...items]
+
+    // Filter by wishlist
+    if (filters.savedOnly && wishlistedIds) {
+      result = result.filter((item) => wishlistedIds.includes(item.id))
+    }
 
     // Filter by category
     if (filters.category !== 'all') {
@@ -78,7 +89,7 @@ export function useGearFilters(items: GearItem[], ratings?: Record<string, numbe
     }
 
     return result
-  }, [items, filters, sortOption, ratings])
+  }, [items, filters, sortOption, ratings, wishlistedIds])
 
   const setFilter = <K extends keyof FilterOptions>(key: K, value: FilterOptions[K]) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
@@ -90,6 +101,7 @@ export function useGearFilters(items: GearItem[], ratings?: Record<string, numbe
       minPrice: undefined,
       maxPrice: undefined,
       minRating: undefined,
+      savedOnly: false,
     })
   }
 

@@ -4,11 +4,11 @@ import MockAccountContext, { type MockAccount } from './MockAccountStore'
 const mockAccounts: MockAccount[] = [
   {
     id: 'nomad-user-001',
-    label: 'Demo Profile 01',
+    label: 'Solo Explorer',
   },
   {
     id: 'nomad-user-002',
-    label: 'Demo Profile 02',
+    label: 'Group Trip List',
   },
 ]
 

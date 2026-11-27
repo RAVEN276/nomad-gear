@@ -1,69 +1,75 @@
 :root {
-  /* Swiss anchor palette (light mode) */
-  --bg-canvas: #ffffff;
-  --bg-surface: #f7f7f8;
-  --bg-elevated: #ffffff;
-  --bg-nav: rgba(255, 255, 255, 0.9);
-  --text-main: #111214;
-  --text-muted: #4b525b;
-  --text-inverse: #ffffff;
-  --accent: #c43600;
-  --accent-hover: #9e2b00;
-  --accent-soft: rgba(196, 54, 0, 0.1);
-  --border-hairline: #d8dce2;
-  --border-control: #767c85;
-  --border-strong: #111214;
+  /* Lo-Fi anchor palette (paper-yellow surfaces, never cream) */
+  --bg-canvas: #e8e0c0;
+  --bg-surface: #ede4cf;
+  --bg-elevated: #e4dbb6;
+  --bg-nav: rgba(232, 224, 192, 0.94);
+  --text-main: #141210;
+  --text-muted: #3a352c;
+  --text-inverse: #ede4cf;
+  --accent: #a80044;
+  --accent-hover: #850036;
+  --accent-soft: rgba(168, 0, 68, 0.12);
+  --riso-magenta: #ff006e;
+  --riso-cyan: #00ffcc;
+  --tape-fill: rgba(214, 198, 146, 0.72);
+  --border-hairline: #7a7058;
+  --border-control: #2d2922;
+  --border-strong: #141210;
 
   /* Feedback colors (WCAG AA verified) */
-  --status-success-bg: #e7f4ec;
-  --status-success-text: #11512c;
-  --status-error-bg: #fdebec;
-  --status-error-text: #8e1723;
-  --status-info-bg: #e9f2fb;
-  --status-info-text: #0f4673;
-  --status-warning-bg: #fdf3dc;
-  --status-warning-text: #6e4800;
+  --status-success-bg: #d3e5cf;
+  --status-success-text: #143d18;
+  --status-error-bg: #f4d3d8;
+  --status-error-text: #7a091b;
+  --status-info-bg: #d3e2ea;
+  --status-info-text: #0f3d57;
+  --status-warning-bg: #eedca8;
+  --status-warning-text: #543700;
 
-  /* Elevation shadows reserved for overlays and 3D lift */
-  --shadow-overlay: 0 24px 56px -16px rgba(17, 18, 20, 0.28);
-  --shadow-3d-lift: 0 22px 36px -18px rgba(17, 18, 20, 0.24);
+  /* Hard print-zine offset shadows */
+  --shadow-offset: 4px 4px 0 #141210;
+  --shadow-overlay: 8px 8px 0 #141210;
 
-  /* Architectural radii */
+  /* Lo-Fi edges */
   --radius-none: 0px;
-  --radius-sharp: 2px;
-  --radius-card: 4px;
-  --radius-pill: 999px;
+  --radius-sharp: 0px;
+  --radius-card: 2px;
 
-  /* Layout & typography */
-  --layout-max: 1200px;
-  --font-sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
-  --font-condensed: 'Archivo Narrow', 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  /* Layout & deliberately colliding system fonts */
+  --layout-max: 1180px;
+  --font-serif: 'Times New Roman', Times, Georgia, serif;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
 }
 
 [data-theme='dark'] {
-  --bg-canvas: #0e1012;
-  --bg-surface: #16181b;
-  --bg-elevated: #1c1f24;
-  --bg-nav: rgba(14, 16, 18, 0.9);
-  --text-main: #f4f5f6;
-  --text-muted: #a5acb5;
-  --text-inverse: #111214;
-  --accent: #ff5c1f;
-  --accent-hover: #ff7744;
-  --accent-soft: rgba(255, 92, 31, 0.16);
-  --border-hairline: #272b30;
-  --border-control: #6e7681;
-  --border-strong: #f4f5f6;
+  --bg-canvas: #181612;
+  --bg-surface: #211e18;
+  --bg-elevated: #28241c;
+  --bg-nav: rgba(24, 22, 18, 0.94);
+  --text-main: #ede4cf;
+  --text-muted: #cbc1a7;
+  --text-inverse: #181612;
+  --accent: #ff4d94;
+  --accent-hover: #ff75ac;
+  --accent-soft: rgba(255, 77, 148, 0.18);
+  --riso-magenta: #ff006e;
+  --riso-cyan: #00ffcc;
+  --tape-fill: rgba(166, 150, 108, 0.42);
+  --border-hairline: #6b6350;
+  --border-control: #aba086;
+  --border-strong: #ede4cf;
 
-  --status-success-bg: #143322;
-  --status-success-text: #9be0b7;
-  --status-error-bg: #3b171c;
-  --status-error-text: #ffb3bc;
-  --status-info-bg: #132c42;
-  --status-info-text: #a2d0f7;
-  --status-warning-bg: #38280b;
-  --status-warning-text: #f7d486;
+  --status-success-bg: #1c321e;
+  --status-success-text: #b7e6ba;
+  --status-error-bg: #3b171e;
+  --status-error-text: #ffb8c3;
+  --status-info-bg: #172d3b;
+  --status-info-text: #b2ddf2;
+  --status-warning-bg: #382c12;
+  --status-warning-text: #f3d794;
 
-  --shadow-overlay: 0 28px 64px -14px rgba(0, 0, 0, 0.72);
-  --shadow-3d-lift: 0 24px 40px -16px rgba(0, 0, 0, 0.65);
+  --shadow-offset: 4px 4px 0 #000000;
+  --shadow-overlay: 8px 8px 0 #000000;
 }

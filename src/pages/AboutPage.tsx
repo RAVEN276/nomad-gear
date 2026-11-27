@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { TornEdgeDivider, ZineStaple, ZineTape } from '../components/ZineMarks'
 
 const kitPillars = [
   {
@@ -76,6 +77,7 @@ function AboutPage() {
         <div className="about-architecture-grid">
           {kitPillars.map((pillar) => (
             <article className="about-card reveal-item" key={pillar.folio}>
+              <ZineStaple />
               <span className="about-card-num">{pillar.folio}</span>
               <h3>{pillar.title}</h3>
               <p>{pillar.description}</p>
@@ -105,8 +107,11 @@ function AboutPage() {
         </div>
       </section>
 
+      <TornEdgeDivider />
+
       <section className="about-section">
         <div className="about-cta-band">
+          <ZineTape position="tl" />
           <div>
             <span className="section-folio">04 · Next Step</span>
             <h2>Compare kits or request dates</h2>

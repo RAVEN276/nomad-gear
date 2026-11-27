@@ -2,7 +2,18 @@ import { animate } from 'animejs'
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { gearCatalog, getGearBySlug } from '../data/gear'
+import { ZineDatePicker } from '../components/ZineDatePicker'
+import { ZineTape } from '../components/ZineMarks'
+import { ZineSelect } from '../components/ZineSelect'
 import { useShakeAnimation } from '../hooks/useShakeAnimation'
+import { calculateRentalEstimate, formatDayCount } from '../utils/bookingEstimate'
+
+const GROUP_SIZE_OPTIONS = [
+  { value: '1', label: '1 camper' },
+  { value: '2', label: '2 campers' },
+  { value: '3', label: '3 campers' },
+  { value: '4', label: '4+ campers' },
+]
 
 interface BookingFormState {
   gearSlug: string
@@ -42,6 +53,18 @@ function BookingPage() {
   const selectedGear = formData.gearSlug ? getGearBySlug(formData.gearSlug) : undefined
   const selectedKitName = selectedGear?.name ?? 'Custom Kit Consultation'
   const selectedKitPrice = selectedGear?.pricePerDay ?? 'Quote on review'
+  const rentalEstimate = calculateRentalEstimate(
+    formData.startDate,
+    formData.endDate,
+    selectedGear?.pricePerDay,
+  )
+  const snapshotEstimate = submittedSnapshot
+    ? calculateRentalEstimate(
+        submittedSnapshot.startDate,
+        submittedSnapshot.endDate,
+        selectedGear?.pricePerDay,
+      )
+    : null
 
   const validateForm = (): boolean => {
     const newErrors: BookingFormErrors = {}
@@ -65,11 +88,7 @@ function BookingPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target
-    const fieldName = name as keyof BookingFormState
+  const handleFieldChange = (fieldName: keyof BookingFormState, value: string) => {
     setFormData((prev) => ({ ...prev, [fieldName]: value }))
     if (fieldName === 'gearSlug') {
       if (value) {
@@ -82,6 +101,24 @@ function BookingPage() {
       setErrors((prev) => ({ ...prev, [fieldName]: '' }))
     }
   }
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target
+    handleFieldChange(name as keyof BookingFormState, value)
+  }
+
+  const kitOptions = [
+    { value: '', label: 'Custom Kit Consultation', badge: 'Quote' },
+    ...gearCatalog.map((kit) => ({
+      value: kit.slug,
+      label: kit.name,
+      badge: `$${kit.pricePerDay}/day`,
+    })),
+  ]
+
+  const todayIso = new Date().toISOString().split('T')[0]
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -117,18 +154,40 @@ function BookingPage() {
         </p>
 
         <div className="booking-summary-card booking-summary-card-main">
-          <div className="summary-kit-section">
-            <p className="summary-label">Selected Kit</p>
-            <p className="summary-value">{selectedKitName}</p>
+          <ZineTape position="tr" />
+          <div className="booking-summary-row">
+            <div className="summary-kit-section">
+              <p className="summary-label">Selected Kit</p>
+              <p className="summary-value">{selectedKitName}</p>
+            </div>
+            <div className="summary-divider" />
+            <div className="summary-pricing-section">
+              <p className="summary-label">Daily Rate</p>
+              <p className="summary-rate">
+                {typeof selectedKitPrice === 'number'
+                  ? `$${selectedKitPrice}/day`
+                  : selectedKitPrice}
+              </p>
+            </div>
           </div>
-          <div className="summary-divider" />
-          <div className="summary-pricing-section">
-            <p className="summary-label">Daily Rate</p>
-            <p className="summary-rate">
-              {typeof selectedKitPrice === 'number'
-                ? `$${selectedKitPrice}/day`
-                : selectedKitPrice}
-            </p>
+
+          <div className="booking-estimate-strip" aria-live="polite">
+            <div className="booking-estimate-cell">
+              <span className="summary-label">Trip Duration</span>
+              <span className="estimate-value">
+                {rentalEstimate ? formatDayCount(rentalEstimate.days) : 'Select dates'}
+              </span>
+            </div>
+            <div className="booking-estimate-cell">
+              <span className="summary-label">Estimated Total</span>
+              <span className="estimate-total">
+                {rentalEstimate
+                  ? rentalEstimate.totalCost !== null
+                    ? `$${rentalEstimate.totalCost}`
+                    : 'Custom quote'
+                  : 'Pending dates'}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -149,20 +208,13 @@ function BookingPage() {
               <label className="form-label" htmlFor="booking-kit-select">
                 Rental Kit
               </label>
-              <select
-                className="form-input"
+              <ZineSelect
                 id="booking-kit-select"
                 name="gearSlug"
-                onChange={handleChange}
+                onChange={(val) => handleFieldChange('gearSlug', val)}
+                options={kitOptions}
                 value={formData.gearSlug}
-              >
-                <option value="">Custom Kit Consultation</option>
-                {gearCatalog.map((kit) => (
-                  <option key={kit.id} value={kit.slug}>
-                    {kit.name} (${kit.pricePerDay}/day)
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             <div className="booking-form-field">
@@ -212,15 +264,15 @@ function BookingPage() {
                   <label className="date-input-label" htmlFor="booking-start-date">
                     From
                   </label>
-                  <input
-                    aria-invalid={!!errors.startDate}
-                    className={`form-input date-input ${errors.startDate ? 'form-input-error' : ''}`}
+                  <ZineDatePicker
+                    ariaInvalid={!!errors.startDate}
                     id="booking-start-date"
-                    min={new Date().toISOString().split('T')[0]}
+                    min={todayIso}
                     name="startDate"
-                    onChange={handleChange}
+                    onChange={(val) => handleFieldChange('startDate', val)}
+                    rangeEnd={formData.endDate}
+                    rangeStart={formData.startDate}
                     required
-                    type="date"
                     value={formData.startDate}
                   />
                 </div>
@@ -228,15 +280,15 @@ function BookingPage() {
                   <label className="date-input-label" htmlFor="booking-end-date">
                     To
                   </label>
-                  <input
-                    aria-invalid={!!errors.endDate}
-                    className={`form-input date-input ${errors.endDate ? 'form-input-error' : ''}`}
+                  <ZineDatePicker
+                    ariaInvalid={!!errors.endDate}
                     id="booking-end-date"
-                    min={formData.startDate || new Date().toISOString().split('T')[0]}
+                    min={formData.startDate || todayIso}
                     name="endDate"
-                    onChange={handleChange}
+                    onChange={(val) => handleFieldChange('endDate', val)}
+                    rangeEnd={formData.endDate}
+                    rangeStart={formData.startDate}
                     required
-                    type="date"
                     value={formData.endDate}
                   />
                 </div>
@@ -250,18 +302,13 @@ function BookingPage() {
               <label className="form-label" htmlFor="booking-group-size">
                 Group Size
               </label>
-              <select
-                className="form-input"
+              <ZineSelect
                 id="booking-group-size"
                 name="groupSize"
-                onChange={handleChange}
+                onChange={(val) => handleFieldChange('groupSize', val)}
+                options={GROUP_SIZE_OPTIONS}
                 value={formData.groupSize}
-              >
-                <option value="1">1 camper</option>
-                <option value="2">2 campers</option>
-                <option value="3">3 campers</option>
-                <option value="4">4+ campers</option>
-              </select>
+              />
             </div>
 
             <div className="booking-form-field">
@@ -303,6 +350,16 @@ function BookingPage() {
                 <strong>
                   {submittedSnapshot.startDate} to {submittedSnapshot.endDate}
                 </strong>
+                {snapshotEstimate && (
+                  <>
+                    {' '}
+                    ({formatDayCount(snapshotEstimate.days)}
+                    {snapshotEstimate.totalCost !== null
+                      ? `, $${snapshotEstimate.totalCost} est. total`
+                      : ''}
+                    )
+                  </>
+                )}
               </p>
             )}
             <button

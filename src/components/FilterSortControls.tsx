@@ -1,4 +1,5 @@
 import type { SortOption } from '@/hooks/useGearFilters'
+import { ZineSelect } from './ZineSelect'
 import './FilterSortControls.css'
 
 interface FilterSortControlsProps {
@@ -7,8 +8,18 @@ interface FilterSortControlsProps {
   onCategoryChange: (category: string) => void
   currentSort: SortOption
   onSortChange: (sort: SortOption) => void
+  savedOnly: boolean
+  wishlistCount: number
+  onToggleSavedOnly: () => void
   onReset: () => void
 }
+
+const SORT_OPTIONS: Array<{ value: SortOption; label: string }> = [
+  { value: 'name', label: 'Name (A to Z)' },
+  { value: 'price-asc', label: 'Price: Low to High' },
+  { value: 'price-desc', label: 'Price: High to Low' },
+  { value: 'rating', label: 'Highest Rated' },
+]
 
 export function FilterSortControls({
   categories,
@@ -16,44 +27,53 @@ export function FilterSortControls({
   onCategoryChange,
   currentSort,
   onSortChange,
+  savedOnly,
+  wishlistCount,
+  onToggleSavedOnly,
   onReset,
 }: FilterSortControlsProps) {
+  const categoryOptions = categories.map((cat) => ({
+    value: cat,
+    label: cat === 'all' ? 'All Categories' : cat.charAt(0).toUpperCase() + cat.slice(1),
+  }))
+
   return (
     <div className="filter-sort-controls" role="region" aria-label="Filter and sort kits">
       <div className="filter-group">
         <label htmlFor="category-filter" className="filter-label">
           Category
         </label>
-        <select
+        <ZineSelect
+          compact
           id="category-filter"
-          className="filter-select"
+          onChange={onCategoryChange}
+          options={categoryOptions}
           value={currentCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat === 'all' ? 'All Categories' : cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </option>
-          ))}
-        </select>
+        />
       </div>
 
       <div className="sort-group">
         <label htmlFor="sort-option" className="filter-label">
           Sort by
         </label>
-        <select
+        <ZineSelect
+          compact
           id="sort-option"
-          className="filter-select"
+          onChange={(val) => onSortChange(val as SortOption)}
+          options={SORT_OPTIONS}
           value={currentSort}
-          onChange={(e) => onSortChange(e.target.value as SortOption)}
-        >
-          <option value="name">Name (A to Z)</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="rating">Highest Rated</option>
-        </select>
+        />
       </div>
+
+      <button
+        aria-pressed={savedOnly}
+        className={`saved-filter-button${savedOnly ? ' is-active' : ''}`}
+        onClick={onToggleSavedOnly}
+        type="button"
+      >
+        <span>Saved Only</span>
+        <span className="saved-filter-count">{wishlistCount}</span>
+      </button>
 
       <button className="reset-filters-button" onClick={onReset} type="button">
         Reset Filters

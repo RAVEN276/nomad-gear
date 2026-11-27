@@ -1,9 +1,18 @@
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSubmitBooking } from '@/api/useGearApi'
+import { ZineDatePicker } from '@/components/ZineDatePicker'
+import { ZineSelect } from '@/components/ZineSelect'
 import { bookingFormSchema, type BookingFormData } from '@/utils/validation'
 import { useBookingStore } from '@/store/useBookingStore'
 import { useState } from 'react'
+
+const GROUP_SIZE_OPTIONS = [
+  { value: '1', label: '1 camper' },
+  { value: '2', label: '2 campers' },
+  { value: '3', label: '3 campers' },
+  { value: '4', label: '4+ campers' },
+]
 
 export function BookingForm() {
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -11,6 +20,7 @@ export function BookingForm() {
   const submitBooking = useSubmitBooking()
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -29,6 +39,8 @@ export function BookingForm() {
   })
 
   const startDate = watch('startDate')
+  const endDate = watch('endDate')
+  const todayIso = new Date().toISOString().split('T')[0]
 
   const onSubmit = async (data: BookingFormData) => {
     try {
@@ -108,26 +120,44 @@ export function BookingForm() {
             <label className="date-input-label" htmlFor="booking-start-date">
               From
             </label>
-            <input
-              aria-invalid={!!errors.startDate}
-              className={`form-input date-input ${errors.startDate ? 'form-input-error' : ''}`}
-              id="booking-start-date"
-              type="date"
-              min={new Date().toISOString().split('T')[0]}
-              {...register('startDate')}
+            <Controller
+              control={control}
+              name="startDate"
+              render={({ field }) => (
+                <ZineDatePicker
+                  ariaInvalid={!!errors.startDate}
+                  id="booking-start-date"
+                  min={todayIso}
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                  rangeEnd={endDate}
+                  rangeStart={startDate}
+                  value={field.value}
+                />
+              )}
             />
           </div>
           <div className="date-input-wrapper">
             <label className="date-input-label" htmlFor="booking-end-date">
               To
             </label>
-            <input
-              aria-invalid={!!errors.endDate}
-              className={`form-input date-input ${errors.endDate ? 'form-input-error' : ''}`}
-              id="booking-end-date"
-              type="date"
-              min={startDate || new Date().toISOString().split('T')[0]}
-              {...register('endDate')}
+            <Controller
+              control={control}
+              name="endDate"
+              render={({ field }) => (
+                <ZineDatePicker
+                  ariaInvalid={!!errors.endDate}
+                  id="booking-end-date"
+                  min={startDate || todayIso}
+                  name={field.name}
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                  rangeEnd={endDate}
+                  rangeStart={startDate}
+                  value={field.value}
+                />
+              )}
             />
           </div>
         </div>
@@ -142,16 +172,20 @@ export function BookingForm() {
         <label className="form-label" htmlFor="booking-group-size">
           Group Size
         </label>
-        <select
-          className="form-input"
-          id="booking-group-size"
-          {...register('groupSize')}
-        >
-          <option value="1">1 camper</option>
-          <option value="2">2 campers</option>
-          <option value="3">3 campers</option>
-          <option value="4">4+ campers</option>
-        </select>
+        <Controller
+          control={control}
+          name="groupSize"
+          render={({ field }) => (
+            <ZineSelect
+              id="booking-group-size"
+              name={field.name}
+              onBlur={field.onBlur}
+              onChange={field.onChange}
+              options={GROUP_SIZE_OPTIONS}
+              value={field.value}
+            />
+          )}
+        />
       </div>
 
       <div className="booking-form-field">

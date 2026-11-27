@@ -29,10 +29,10 @@ export function useAnimateOnScroll(selector: string, dependencyKey = ''): void {
       const targets = pendingBatch.splice(0, pendingBatch.length)
       animate(targets, {
         opacity: [0, 1],
-        translateY: [18, 0],
-        duration: 480,
-        delay: stagger(55),
-        ease: 'outQuad',
+        translateY: [16, 0],
+        duration: 340,
+        delay: stagger(45),
+        ease: 'steps(5)',
       })
     }
 

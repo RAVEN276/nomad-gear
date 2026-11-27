@@ -47,4 +47,19 @@ describe('BookingForm', () => {
     
     expect(await screen.findByText(/Please enter a valid email/i)).toBeInTheDocument()
   })
+
+  it('opens custom dropdown list and calendar popover for group size and trip dates', () => {
+    renderWithProviders(<BookingForm />)
+
+    const groupSizeTrigger = screen.getByRole('combobox', { name: /Group Size/i })
+    fireEvent.click(groupSizeTrigger)
+    fireEvent.click(screen.getByRole('option', { name: /4\+ campers/i }))
+    expect(groupSizeTrigger).toHaveTextContent(/4\+ campers/i)
+
+    const fromInput = screen.getByLabelText(/^From$/i)
+    fireEvent.click(fromInput)
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /Today/i }))
+    expect((fromInput as HTMLInputElement).value).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+  })
 })

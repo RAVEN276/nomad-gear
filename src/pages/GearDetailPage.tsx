@@ -1,8 +1,9 @@
 import { animate, stagger } from 'animejs'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { CampingGear3DCanvas } from '../components/CampingGear3DCanvas'
+import { CampingGear3DStage } from '../components/CampingGear3DStage'
 import { ReviewForm, ReviewSection } from '../components/ReviewComponents'
+import { ZineTape } from '../components/ZineMarks'
 import { getGearBySlug } from '../data/gear'
 import { useBookingModal } from '../features/booking/useBookingModal'
 import { useGalleryLightbox } from '../features/gallery/useGalleryLightbox'
@@ -109,8 +110,10 @@ function GearDetailPage() {
         </div>
 
         <div className="detail-media">
+          <ZineTape position="tl" />
+          <ZineTape position="tr" />
           {viewMode === 'model3d' ? (
-            <CampingGear3DCanvas kit={selectedGear} />
+            <CampingGear3DStage kit={selectedGear} />
           ) : (
             <>
               <button

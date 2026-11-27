@@ -1,9 +1,6 @@
 import { Link } from 'react-router-dom'
-import { useMockAccount } from '../features/account/useMockAccount'
 
 function Footer() {
-  const { activeAccount } = useMockAccount()
-
   return (
     <footer className="site-footer">
       <div className="page-shell footer-container">
@@ -57,9 +54,6 @@ function Footer() {
         <div className="page-shell footer-bottom-content">
           <p className="footer-copyright">
             © {new Date().getFullYear()} Nomad Gear.
-          </p>
-          <p className="footer-account-indicator">
-            Active wishlist profile: {activeAccount.label}
           </p>
         </div>
       </div>

@@ -23,25 +23,25 @@ interface Palette3D {
 function getPaletteForTheme(theme: 'light' | 'dark'): Palette3D {
   if (theme === 'dark') {
     return {
-      canvasBg: 0x16181b,
-      platform: 0x1c1f24,
-      gridLine: 0x353b44,
-      shellPrimary: 0xe6e8eb,
-      shellSecondary: 0x2a2f36,
-      accent: 0xff5c1f,
-      inkEdge: 0x0e1012,
-      lanternGlow: 0xffb347,
+      canvasBg: 0x211e18,
+      platform: 0x28241c,
+      gridLine: 0x6b6350,
+      shellPrimary: 0xede4cf,
+      shellSecondary: 0x3a3429,
+      accent: 0xff4d94,
+      inkEdge: 0x0e0d0a,
+      lanternGlow: 0x00ffcc,
     }
   }
   return {
-    canvasBg: 0xf7f7f8,
-    platform: 0xffffff,
-    gridLine: 0xd0d5dd,
-    shellPrimary: 0x22262b,
-    shellSecondary: 0xe4e7ec,
-    accent: 0xc43600,
-    inkEdge: 0x111214,
-    lanternGlow: 0xff9f1c,
+    canvasBg: 0xede4cf,
+    platform: 0xe8e0c0,
+    gridLine: 0x7a7058,
+    shellPrimary: 0x2a2620,
+    shellSecondary: 0xd8ceb0,
+    accent: 0xff006e,
+    inkEdge: 0x141210,
+    lanternGlow: 0x00b894,
   }
 }
 
@@ -375,10 +375,10 @@ export function CampingGear3DCanvas({ kit, priorityHero = false }: CampingGear3D
     nextGroup.scale.set(0.84, 0.84, 0.84)
     nextGroup.rotation.y = -Math.PI * 0.4
 
-    const tl = createTimeline({ defaults: { ease: 'outExpo' } })
+    const tl = createTimeline({ defaults: { ease: 'steps(8)' } })
     tl.add(nextGroup.position, {
       y: 0,
-      duration: 620,
+      duration: 480,
     })
       .add(
         nextGroup.scale,
@@ -386,7 +386,7 @@ export function CampingGear3DCanvas({ kit, priorityHero = false }: CampingGear3D
           x: 1,
           y: 1,
           z: 1,
-          duration: 620,
+          duration: 480,
         },
         '<',
       )
@@ -394,7 +394,7 @@ export function CampingGear3DCanvas({ kit, priorityHero = false }: CampingGear3D
         nextGroup.rotation,
         {
           y: 0,
-          duration: 780,
+          duration: 560,
         },
         '<',
       )
@@ -519,3 +519,5 @@ export function CampingGear3DCanvas({ kit, priorityHero = false }: CampingGear3D
     </div>
   )
 }
+
+export default CampingGear3DCanvas

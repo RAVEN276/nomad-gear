@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useGearCatalog } from '@/api/useGearCatalog'
+import { useWishlist } from '@/features/wishlist/useWishlist'
 import { useGearFilters } from '@/hooks/useGearFilters'
 import { useGearStore } from '@/store/useGearStore'
 import { useReviewStore } from '@/store/useReviewStore'
@@ -12,6 +13,7 @@ function GearCatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { gearList, setGearList, setSearchQuery, setSelectedCategory } = useGearStore()
   const getAverageRating = useReviewStore((state) => state.getAverageRating)
+  const { wishlistedIds, wishlistCount } = useWishlist()
   const { isLoading, error } = useGearCatalog()
 
   useEffect(() => {
@@ -37,13 +39,26 @@ function GearCatalogPage() {
     setSortOption,
     resetFilters,
     categories,
-  } = useGearFilters(catalogItems, averageRatings)
+  } = useGearFilters(catalogItems, averageRatings, wishlistedIds)
 
   const urlCategory = searchParams.get('category') || 'all'
+  const urlSaved = searchParams.get('saved') === '1'
   useEffect(() => {
     setFilter('category', urlCategory)
     setSelectedCategory(urlCategory)
-  }, [urlCategory, setSelectedCategory])
+    setFilter('savedOnly', urlSaved)
+  }, [urlCategory, urlSaved, setSelectedCategory])
+
+  const syncQueryParams = (nextCategory: string, nextSavedOnly: boolean) => {
+    const nextParams: Record<string, string> = {}
+    if (nextCategory && nextCategory !== 'all') {
+      nextParams.category = nextCategory
+    }
+    if (nextSavedOnly) {
+      nextParams.saved = '1'
+    }
+    setSearchParams(nextParams)
+  }
 
   const handleResetAll = () => {
     resetFilters()
@@ -89,14 +104,17 @@ function GearCatalogPage() {
           onCategoryChange={(category) => {
             setFilter('category', category)
             setSelectedCategory(category)
-            if (category === 'all') {
-              setSearchParams({})
-            } else {
-              setSearchParams({ category })
-            }
+            syncQueryParams(category, filters.savedOnly)
           }}
           currentSort={sortOption}
           onSortChange={setSortOption}
+          savedOnly={filters.savedOnly}
+          wishlistCount={wishlistCount}
+          onToggleSavedOnly={() => {
+            const nextSavedOnly = !filters.savedOnly
+            setFilter('savedOnly', nextSavedOnly)
+            syncQueryParams(filters.category, nextSavedOnly)
+          }}
           onReset={handleResetAll}
         />
       </section>

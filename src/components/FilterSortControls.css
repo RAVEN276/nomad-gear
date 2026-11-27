@@ -5,38 +5,54 @@
   align-items: flex-end;
   padding: 1.25rem;
   background-color: var(--bg-surface);
-  border: 1px solid var(--border-hairline);
-  border-radius: var(--radius-card);
+  border: 2px solid var(--border-strong);
+  box-shadow: var(--shadow-offset);
 }
 
 .filter-group,
 .sort-group {
   display: grid;
   gap: 0.35rem;
+  min-width: 210px;
 }
 
 .filter-label {
-  font-family: var(--font-condensed);
+  font-family: var(--font-mono);
   font-weight: 700;
   color: var(--text-main);
   font-size: 0.82rem;
-  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-.filter-select {
+.saved-filter-button {
   min-height: 44px;
-  min-width: 180px;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid var(--border-control);
-  border-radius: var(--radius-sharp);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.95rem;
   background-color: var(--bg-canvas);
-  font-size: 0.92rem;
+  border: 2px solid var(--border-strong);
   color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 700;
+  box-shadow: 3px 3px 0 var(--border-strong);
 }
 
-.filter-select:hover {
-  border-color: var(--text-main);
+.saved-filter-button:hover,
+.saved-filter-button.is-active {
+  background-color: var(--accent);
+  color: var(--text-inverse);
+}
+
+.saved-filter-count {
+  min-width: 1.4rem;
+  padding: 0.08rem 0.35rem;
+  border: 1px solid var(--border-strong);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  font-size: 0.78rem;
+  text-align: center;
 }
 
 .reset-filters-button {
@@ -44,16 +60,16 @@
   margin-left: auto;
   padding: 0.55rem 1.15rem;
   background-color: var(--bg-canvas);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sharp);
+  border: 2px solid var(--border-strong);
   color: var(--text-main);
-  font-size: 0.88rem;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
   font-weight: 700;
+  box-shadow: 3px 3px 0 var(--border-strong);
 }
 
 .reset-filters-button:hover {
   background-color: var(--accent);
-  border-color: var(--accent);
   color: var(--text-inverse);
 }
 
@@ -63,9 +79,13 @@
     align-items: stretch;
   }
 
-  .filter-select,
+  .filter-group,
+  .sort-group,
+  .saved-filter-button,
   .reset-filters-button {
     width: 100%;
+    min-width: 0;
     margin-left: 0;
+    justify-content: center;
   }
 }

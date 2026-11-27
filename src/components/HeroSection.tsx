@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { gearCatalog } from '../data/gear'
 import { useBookingModal } from '../features/booking/useBookingModal'
-import { CampingGear3DCanvas } from './CampingGear3DCanvas'
+import { CampingGear3DStage } from './CampingGear3DStage'
+import { ZineTape } from './ZineMarks'
 
 const featuredHeroKits = gearCatalog.slice(0, 3)
 
@@ -96,7 +97,9 @@ function HeroSection() {
 
         <div className="hero-stage">
           <div className="hero-deck">
-            <CampingGear3DCanvas kit={activeKit} priorityHero />
+            <ZineTape position="tl" />
+            <ZineTape position="tr" />
+            <CampingGear3DStage kit={activeKit} priorityHero />
 
             <div className="hero-spec-strip">
               <div className="hero-spec-cell">

@@ -3,6 +3,7 @@ import { LAZY_PLACEHOLDER } from '../data/media'
 import { useWishlist } from '../features/wishlist/useWishlist'
 import { useImageLoader } from '../hooks/useImageLoader'
 import type { GearItem } from '@/store/useBookingStore'
+import { ZineStaple, ZineTape } from './ZineMarks'
 
 interface GearCardProps {
   gear: GearItem
@@ -19,6 +20,7 @@ function GearCard({ gear, index = 0, featured = false, onBookNow }: GearCardProp
 
   return (
     <article className={`gear-card reveal-item${featured ? ' gear-card--featured' : ''}`}>
+      {featured ? <ZineTape position="tl" /> : <ZineStaple />}
       <div className="gear-media">
         <span className="gear-folio-badge">{folio}</span>
         <button

@@ -3,8 +3,10 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { useBookingModal } from './useBookingModal'
+import { ZineDatePicker } from '@/components/ZineDatePicker'
 import { useShakeAnimation } from '@/hooks/useShakeAnimation'
 import type { GearItem } from '@/store/useBookingStore'
+import { calculateRentalEstimate, formatDayCount } from '@/utils/bookingEstimate'
 
 function BookNowModal() {
   const navigate = useNavigate()
@@ -94,7 +96,7 @@ function BookNowModal() {
     )
 
     const formElements = panelRef.current.querySelectorAll<HTMLElement>(
-      '.form-label, .form-input, .modal-actions, .booking-modal-copy',
+      '.form-label, .form-input, .zine-date-control, .modal-actions, .booking-modal-copy',
     )
     if (formElements.length) {
       tl.add(
@@ -148,7 +150,13 @@ function BookNowModal() {
     return null
   }
 
-  const selectedKitName = (selectedGear as GearItem | null)?.name ?? 'Flexible Custom Kit'
+  const selectedGearItem = selectedGear as GearItem | null
+  const selectedKitName = selectedGearItem?.name ?? 'Flexible Custom Kit'
+  const rentalEstimate = calculateRentalEstimate(
+    startDate,
+    endDate,
+    selectedGearItem?.pricePerDay,
+  )
 
   const handleQuickSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -249,14 +257,14 @@ function BookNowModal() {
               <label className="date-input-label" htmlFor="quick-start-date">
                 From
               </label>
-              <input
-                className="form-input date-input"
+              <ZineDatePicker
                 id="quick-start-date"
                 min={new Date().toISOString().split('T')[0]}
                 name="quick-start-date"
-                onChange={(e) => setStartDate(e.target.value)}
+                onChange={setStartDate}
+                rangeEnd={endDate}
+                rangeStart={startDate}
                 required
-                type="date"
                 value={startDate}
               />
             </div>
@@ -264,18 +272,29 @@ function BookNowModal() {
               <label className="date-input-label" htmlFor="quick-end-date">
                 To
               </label>
-              <input
-                className="form-input date-input"
+              <ZineDatePicker
                 id="quick-end-date"
                 min={startDate || new Date().toISOString().split('T')[0]}
                 name="quick-end-date"
-                onChange={(e) => setEndDate(e.target.value)}
+                onChange={setEndDate}
+                rangeEnd={endDate}
+                rangeStart={startDate}
                 required
-                type="date"
                 value={endDate}
               />
             </div>
           </div>
+
+          {rentalEstimate && (
+            <div className="booking-modal-estimate" role="status">
+              <span>Duration: {formatDayCount(rentalEstimate.days)}</span>
+              <strong>
+                {rentalEstimate.totalCost !== null
+                  ? `Est. $${rentalEstimate.totalCost} ($${selectedGearItem?.pricePerDay}/day)`
+                  : 'Quote on review'}
+              </strong>
+            </div>
+          )}
 
           {errorMessage && (
             <p className="form-error" role="alert">

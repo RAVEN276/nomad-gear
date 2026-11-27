@@ -31,11 +31,11 @@ bunx vitest run
 
 ## Design & Motion Rules
 
-1. **Visual Direction (Swiss Technical Outfitter)**:
-   - Light mode: `#FFFFFF` canvas, `#F7F7F8` surface, `#111214` ink, `#4B525B` muted text, `#C43600` International Orange accent.
-   - Dark mode (`[data-theme="dark"]`): `#0E1012` canvas, `#16181B` surface, `#F4F5F6` ink, `#A5ACB5` muted text, `#FF5C1F` accent.
-   - Typography: `'Archivo'` and `'Archivo Narrow'` (with `tabular-nums` for prices and folio markers).
-   - Structure: `1px` architectural hairlines, `2px`–`4px` corners, asymmetric layouts. Avoid warm cream surfaces, serif headings, neon glows, or decorative pills.
+1. **Visual Direction (Lo-Fi Field Zine)**:
+   - Light mode: `#E8E0C0` / `#EDE4CF` paper-yellow surfaces (never cream), `#141210` ink, `#3A352C` muted text, `#A80044` Risograph magenta accent (`#FF006E` / `#00FFCC` RGB offset channels).
+   - Dark mode (`[data-theme="dark"]`): `#181612` / `#211E18` darkroom surfaces, `#EDE4CF` paper ink, `#CBC1A7` muted text, `#FF4D94` accent.
+   - Typography: Colliding system fonts (`Times New Roman` display/titles, `Helvetica Neue` body, `Courier New` prices/stamps/manifests).
+   - Structure & Texture: Off-grid rotated cards (`1.5–3°`), hard print offset shadows (`4px 4px 0`), halftone dot overlays, Risograph `text-shadow` misregistration, SVG tape/staples/torn-edge dividers (`src/components/ZineMarks.tsx`), and stepped motion (`steps(...)`). Avoid sterile Swiss grids, cream surfaces, or webfonts.
 2. **3D WebGL + Anime.js v4 Rules**:
    - Render 3D gear models via WebGL (`src/components/CampingGear3DCanvas.tsx` with Three.js `<canvas>`), NOT CSS DOM 3D perspective/tilt transforms (`rotateX`, `rotateY`, `translateZ`, `preserve-3d` on DOM cards/modals).
    - Drive Three.js object properties (`position`, `rotation`, `scale`, camera spherical state) using Anime.js v4 (`animate`, `createTimeline`, `createAnimatable`, `createSpring`).

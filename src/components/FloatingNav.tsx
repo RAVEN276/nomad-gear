@@ -7,6 +7,7 @@ import { useWishlist } from '../features/wishlist/useWishlist'
 import type { GearItem } from '@/store/useBookingStore'
 import MorphHamburgerButton from './MorphHamburgerButton'
 import { ThemeToggle } from './ThemeToggle'
+import { ZineSelect } from './ZineSelect'
 
 const navItems = [
   { label: 'Home', to: '/' },
@@ -175,6 +176,19 @@ function FloatingNav() {
             type="button"
           >
             <span>Categories</span>
+            <svg
+              aria-hidden="true"
+              className="nav-category-caret"
+              fill="none"
+              height="12"
+              stroke="currentColor"
+              strokeLinecap="square"
+              strokeWidth="2.4"
+              viewBox="0 0 16 16"
+              width="12"
+            >
+              <path d="M3 6l5 5 5-5" />
+            </svg>
           </button>
           {isCategoryMenuOpen && (
             <div className="nav-category-menu" role="menu">
@@ -298,18 +312,17 @@ function FloatingNav() {
               <label className="form-label" htmlFor="mobile-account-select">
                 Wishlist Profile
               </label>
-              <select
-                className="mobile-account-select"
+              <ZineSelect
+                className="mobile-account-select-wrap"
+                compact
                 id="mobile-account-select"
-                onChange={(event) => switchAccount(event.target.value)}
+                onChange={switchAccount}
+                options={accounts.map((account) => ({
+                  value: account.id,
+                  label: account.label,
+                }))}
                 value={activeAccount.id}
-              >
-                {accounts.map((account) => (
-                  <option key={account.id} value={account.id}>
-                    {account.label}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             <Link

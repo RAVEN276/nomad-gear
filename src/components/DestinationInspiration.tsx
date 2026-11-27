@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { destinations, type Destination } from '../data/destinations'
 import { LAZY_PLACEHOLDER } from '../data/media'
+import { TornEdgeDivider, ZineTape } from './ZineMarks'
 
 const categoryPairingByDestination: Record<string, string> = {
   'echo-lake': 'Backpacking',
@@ -23,6 +24,7 @@ function DestinationCard({
 
   return (
     <article className="destination-card reveal-item">
+      <ZineTape position={index % 2 === 0 ? 'tl' : 'tr'} />
       <div className="destination-photo">
         <img
           alt={destination.imageAlt}
@@ -54,7 +56,8 @@ function DestinationInspiration() {
       className="page-shell section-block destination-section"
       id="destination-inspiration"
     >
-      <div className="section-header-split">
+      <TornEdgeDivider />
+      <div className="section-header-split" style={{ marginTop: '1.5rem' }}>
         <div className="section-heading-main">
           <span className="section-folio">03 · Destination Index</span>
           <h2>Field pairings for weekend routes.</h2>

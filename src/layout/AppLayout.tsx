@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import FloatingNav from '../components/FloatingNav'
 import Footer from '../components/Footer'
@@ -30,7 +30,17 @@ function AppLayout() {
       </a>
       <FloatingNav />
       <main className="site-main" id="main-content" tabIndex={-1}>
-        <Outlet />
+        <Suspense
+          fallback={
+            <div className="page-shell page-top-space section-block">
+              <div className="route-loading-fallback" role="status">
+                Loading page manifest...
+              </div>
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
       </main>
       <BookNowModal />
       <GalleryLightbox />

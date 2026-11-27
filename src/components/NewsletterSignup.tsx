@@ -1,6 +1,7 @@
 import { animate, createDrawable } from 'animejs'
 import { useRef, useState, type FormEvent } from 'react'
 import { subscribeToNewsletter } from '../utils/newsletter'
+import { TornEdgeDivider, ZineStaple } from './ZineMarks'
 
 type NewsletterStatus = 'idle' | 'loading' | 'success' | 'error'
 
@@ -51,7 +52,11 @@ function NewsletterSignup() {
 
   return (
     <section className="newsletter-band" id="newsletter-signup">
+      <div className="page-shell" style={{ marginBottom: '1.25rem' }}>
+        <TornEdgeDivider />
+      </div>
       <div className="page-shell newsletter-band-inner reveal-item">
+        <ZineStaple />
         <div className="newsletter-copy">
           <div className="newsletter-icon-mark" aria-hidden="true">
             <svg ref={iconSvgRef} viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">

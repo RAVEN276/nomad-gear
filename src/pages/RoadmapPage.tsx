@@ -1,3 +1,5 @@
+import { ZineStaple } from '../components/ZineMarks'
+
 interface RoadmapPhase {
   phase: string
   title: string
@@ -74,6 +76,7 @@ function RoadmapPage() {
         <div className="roadmap-timeline">
           {phases.map((p) => (
             <div className="roadmap-card reveal-item" key={p.phase}>
+              <ZineStaple />
               <div className="roadmap-card-header">
                 <div>
                   <span className="roadmap-phase">{p.phase}</span>

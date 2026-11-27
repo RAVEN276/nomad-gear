@@ -35,7 +35,7 @@ describe('Nomad Gear interactive click-through', () => {
     const alpineTab = screen.getByRole('tab', { name: /Alpine Basecamp Bundle/i })
     fireEvent.click(alpineTab)
     expect(screen.getByRole('button', { name: /Reserve Alpine Basecamp Bundle/i })).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: /Rotate 3D model left/i }))
+    fireEvent.click(await screen.findByRole('button', { name: /Rotate 3D model left/i }))
     fireEvent.click(screen.getByRole('button', { name: /Rotate 3D model right/i }))
     fireEvent.click(screen.getByRole('button', { name: /Reset 3D model view/i }))
 
@@ -75,9 +75,10 @@ describe('Nomad Gear interactive click-through', () => {
 
     expect(await screen.findByRole('heading', { level: 1, name: /Choose your camp kit/i })).toBeInTheDocument()
 
-    // Filter by Mountain category
+    // Filter by Mountain category using ZineSelect dropdown
     const categorySelect = screen.getByLabelText(/^Category$/i)
-    fireEvent.change(categorySelect, { target: { value: 'Mountain' } })
+    fireEvent.click(categorySelect)
+    fireEvent.click(screen.getByRole('option', { name: 'Mountain' }))
     expect(screen.getByText('Alpine Basecamp Bundle')).toBeInTheDocument()
     expect(screen.queryByText('Weekend Light Kit')).not.toBeInTheDocument()
 
@@ -85,10 +86,17 @@ describe('Nomad Gear interactive click-through', () => {
     fireEvent.click(screen.getByRole('button', { name: /Reset Filters/i }))
     expect(screen.getByText('Weekend Light Kit')).toBeInTheDocument()
 
-    // Toggle wishlist
+    // Toggle wishlist and verify Saved Only filter
     const wishlistBtn = screen.getByRole('button', { name: /Save Weekend Light Kit to wishlist/i })
     fireEvent.click(wishlistBtn)
     expect(screen.getByRole('button', { name: /Remove Weekend Light Kit from wishlist/i })).toBeInTheDocument()
+
+    const savedOnlyBtn = screen.getByRole('button', { name: /Saved Only/i })
+    fireEvent.click(savedOnlyBtn)
+    expect(screen.getByText('Weekend Light Kit')).toBeInTheDocument()
+    expect(screen.queryByText('Alpine Basecamp Bundle')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /Reset Filters/i }))
+    expect(screen.getByText('Alpine Basecamp Bundle')).toBeInTheDocument()
 
     // Mobile menu open & close
     fireEvent.click(screen.getByRole('button', { name: /Open navigation menu/i }))
@@ -148,6 +156,7 @@ describe('Nomad Gear interactive click-through', () => {
     fireEvent.change(within(mainRegion).getByLabelText(/^Email/i), { target: { value: 'raka@example.com' } })
     fireEvent.change(within(mainRegion).getByLabelText(/^From$/i), { target: { value: '2026-12-10' } })
     fireEvent.change(within(mainRegion).getByLabelText(/^To$/i), { target: { value: '2026-12-12' } })
+    expect(within(mainRegion).getByText('3 days')).toBeInTheDocument()
     fireEvent.click(within(mainRegion).getByRole('button', { name: /Request Tentative Hold/i }))
     expect(await within(mainRegion).findByText(/Hold Request Recorded/i)).toBeInTheDocument()
 
